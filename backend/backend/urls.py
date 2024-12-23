@@ -25,7 +25,7 @@ schema_view = get_schema_view(
     openapi.Info(
         title="Campaign API",
         default_version='v1',
-        description="This are endpoints for a campaign website",
+        # description="This are endpoints for a campaign website",
         terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="ephesianslewis@gmail.com"),
         license=openapi.License(name="BSD License"),
