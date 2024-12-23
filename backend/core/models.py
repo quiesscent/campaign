@@ -24,3 +24,18 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Candidate(models.Model):
+    name = models.CharField(max_length=1000000, default='')
+    position = models.CharField(max_length=1000, default='')
+    about = models.TextField(default='')
+    
+
+    def __str__(self):
+        return self.name
+
+class Policies(models.Model):
+    title = models.CharField(max_length=10000000000, default='')
+    file =  models.FileField(upload_to='uploads/documents/')
+
