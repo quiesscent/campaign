@@ -19,6 +19,24 @@ class Blog(models.Model):
     def __str__(self):
         return self.title
 
+class County(models.Model):
+    name = models.CharField(max_length=20, default='')
+
+    class Meta:
+        verbose_name_plural = 'Counties'
+
+    def __str__(self):
+        return f'{self.name}'
+
+
+class Ward(models.Model):
+    name = models.CharField(max_length=20, default='')
+    county = models.ForeignKey(County, related_name='ward', on_delete=models.CASCADE)
+
+   
+    def __str__(self):
+        return f'{self.name}'
+
 
 class Event(models.Model):
     title = models.CharField(max_length=10000, default='')
@@ -35,17 +53,31 @@ class Event(models.Model):
     def __str__(self):
         return self.title
 
+class Policies(models.Model):
+    title = models.CharField(max_length=10000000000, default='')
+    file =  models.FileField(upload_to='uploads/documents/')
+
+
+class Volunteer(models.Model):
+    full_name = models.CharField(default='', max_length=20)
+    role = models.CharField(default='', max_length=100)
+    skills = models.TextField()
+    phone_number = models.IntegerField()
+    county =  models.ForeignKey(County, on_delete=models.CASCADE)
+    ward = models.ForeignKey(Ward, on_delete=models.CASCADE)
+        
+    def __str__(self):
+        return f'{self.full_name}'
+
 
 class Candidate(models.Model):
     name = models.CharField(max_length=1000000, default='')
     position = models.CharField(max_length=1000, default='')
     about = models.TextField(default='')
-    
+    county =  models.ForeignKey(County, on_delete=models.CASCADE)
+    ward = models.ForeignKey(Ward, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
-
-class Policies(models.Model):
-    title = models.CharField(max_length=10000000000, default='')
-    file =  models.FileField(upload_to='uploads/documents/')
+        return f'{self.name} for {self.position} in {self.county}'
+    
 

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Blog, Event
+from .models import Blog, Event, Volunteer, Ward, County, Policies , Candidate
 
 class BlogSerializer(serializers.ModelSerializer):
     rendered_content = serializers.SerializerMethodField()
@@ -20,3 +20,30 @@ class EventSerializer(serializers.ModelSerializer):
     
     def get_rendered_content(self, obj):
         return obj.formatted_content()
+
+class CandidateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Candidate 
+        fields = '__all__'
+
+class PolicySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Policies
+        fields = '__all__'
+
+
+class CountySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = County
+        fields = '__all__'
+
+class WardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ward
+        fields = '__all__'
+
+class VolunteerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Volunteer
+        fields = '__all__'
