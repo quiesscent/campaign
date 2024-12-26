@@ -13,4 +13,5 @@ urlpatterns = [
     path('volunteers', VolunteerList.as_view(), name='volunteers'),
     path('events/<int:pk>', EventDetail.as_view(), name='e_detail'),
     path('blogs/<int:pk>', BlogDetail.as_view(), name='b_detail'),
+    path('candidates/<int:pk>', CandidateDetail.as_view(), name='candiate_detail'),
 ]

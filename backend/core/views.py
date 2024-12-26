@@ -91,21 +91,25 @@ class  CountyList(generics.ListAPIView):
 
 
 class EventDetail(APIView):
-    """
-    Retrieve, update or delete an Event instance.
-    """
+
     def get_object(self, pk):
         try:
             return Event.objects.get(pk=pk)
         except Event.DoesNotExist:
             raise Http404
 
-    def get(self, request, pk, format=None):
+    def get(self, request, pk, format=None):  
+        """
+        Get a Event instance.
+        """
         event= self.get_object(pk)
         serializer = EventSerializer(event)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
+        """
+        Update an Event instance.
+        """
         event = self.get_object(pk)
         serializer = EventSerializer(event, data=request.data)
         if serializer.is_valid():
@@ -114,14 +118,15 @@ class EventDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
+        """
+        Delete an Event instance.
+        """
         event = self.get_object(pk)
         event.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class BlogDetail(APIView):
-    """
-    Retrieve, update or delete a Blog instance.
-    """
+    
     def get_object(self, pk):
         try:
             return Blog.objects.get(pk=pk)
@@ -129,11 +134,17 @@ class BlogDetail(APIView):
             raise Http404
 
     def get(self, request, pk, format=None):
+        """
+        Get a Blog instance.
+        """
         blog = self.get_object(pk)
         serializer = BlogSerializer(blog)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
+        """
+        Update a Blog instance.
+        """
         blog  = self.get_object(pk)
         serializer = BlogSerializer(blog, data=request.data)
         if serializer.is_valid():
@@ -142,6 +153,24 @@ class BlogDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
+        """
+        Delete a Blog instance.
+        """
         blog = self.get_object(pk)
         blog.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class CandidateDetail(APIView):
+    def get_object(self, pk):
+        try:
+            return Event.objects.get(pk=pk)
+        except Event.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        """
+        Get a Candidate instance.
+        """
+        event= self.get_object(pk)
+        serializer = EventSerializer(event)
+        return Response(serializer.data)
