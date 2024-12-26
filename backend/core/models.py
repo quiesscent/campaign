@@ -80,4 +80,19 @@ class Candidate(models.Model):
     def __str__(self):
         return f'{self.name} for {self.position} in {self.county}'
     
+class Issue(models.Model):
+    ISSUE_LEVEL = (
+        ('national', 'National'),
+        ('county', 'County'),
+        ('ward', 'Ward'),
+    )
+    title = models.TextField()
+    content = MarkdownxField()
+    level =  models.CharField(max_length=20, choices=ISSUE_LEVEL) 
+    county =  models.ForeignKey(County, on_delete=models.CASCADE)
+    ward = models.ForeignKey(Ward, on_delete=models.CASCADE)
+
+
+    def __str__(self):
+        return f'A {self.level} issue level on {self.title}'
 

@@ -17,6 +17,9 @@ class  VolunteerCreate(generics.CreateAPIView):
     queryset = Volunteer.objects.all()
     serializer_class = VolunteerSerializer
 
+class  IssueCreate(generics.CreateAPIView):
+    queryset = Issue.objects.all()
+    serializer_class = IssueSerializer
 
 class EventCreate(generics.CreateAPIView):
     parser_classes = [MultiPartParser, FormParser]
@@ -27,6 +30,16 @@ class EventCreate(generics.CreateAPIView):
 class  BlogList(generics.ListAPIView):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
+
+    def list(self, request, *args, **kwargs):
+        # Get the standard response
+        response = super().list(request, *args, **kwargs)
+
+        return Response(response.data['results'], status=status.HTTP_200_OK)
+
+class  IssueList(generics.ListAPIView):
+    queryset = Issue.objects.all()
+    serializer_class = IssueSerializer
 
     def list(self, request, *args, **kwargs):
         # Get the standard response
@@ -173,4 +186,20 @@ class CandidateDetail(APIView):
         """
         event= self.get_object(pk)
         serializer = EventSerializer(event)
+        return Response(serializer.data)
+
+class IssueDetail(APIView):
+
+    def get_object(self, pk):
+        try:
+            return Issue.objects.get(pk=pk)
+        except Issue.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        """
+        Get a Issue instance.
+        """
+        issue = self.get_object(pk)
+        serializer = IssueSerializer(issue)
         return Response(serializer.data)
