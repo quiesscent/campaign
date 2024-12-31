@@ -19,6 +19,14 @@ class Blog(models.Model):
     def __str__(self):
         return self.title
 
+class Tag(models.Model):
+    name = models.CharField(max_length=10000, default='')
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='tags')
+
+    def __str__(self):
+        return self.title
+    
+
 class County(models.Model):
     name = models.CharField(max_length=20, default='')
 

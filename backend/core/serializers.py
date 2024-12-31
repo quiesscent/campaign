@@ -1,12 +1,20 @@
 from rest_framework import serializers
-from .models import Blog, Event, Volunteer, Ward, Issue, County, Policies , Candidate
+from .models import Blog, Event, Volunteer, Ward, Issue, County, Policies , Candidate, Tag
+
+
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ['id', 'name']
+
 
 class BlogSerializer(serializers.ModelSerializer):
     rendered_content = serializers.SerializerMethodField()
-    
+    tags = TagSerializer(many=True, read_only=True)
     class Meta:
         model = Blog 
-        fields = ['id', 'title', 'description', 'content', 'image', 'rendered_content']
+        fields = ['id', 'title', 'description', 'content', 'image', 'rendered_content', 'tags' ]
 
     def get_rendered_content(self, obj):
         return obj.formatted_content()
