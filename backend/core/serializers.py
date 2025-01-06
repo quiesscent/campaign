@@ -8,13 +8,22 @@ class TagSerializer(serializers.ModelSerializer):
         model = Tag
         fields = ['id', 'name']
 
+class BlogCreateSerializer(serializers.ModelSerializer):    
+    rendered_content = serializers.SerializerMethodField()
+    tags = TagSerializer(many=True, read_only=True)
+    class Meta:
+        model = Blog 
+        fields = ['id', 'title', 'description', 'content', 'image', 'rendered_content', 'tags' ]
+
+    def get_rendered_content(self, obj):
+        return obj.formatted_content()
 
 class BlogSerializer(serializers.ModelSerializer):
     rendered_content = serializers.SerializerMethodField()
     tags = TagSerializer(many=True, read_only=True)
     class Meta:
         model = Blog 
-        fields = ['id', 'title', 'description', 'content', 'image', 'rendered_content', 'tags' ]
+        fields = ['id', 'title', 'description', 'content', 'image', 'rendered_content', 'tags',  'created_at' ]
 
     def get_rendered_content(self, obj):
         return obj.formatted_content()
@@ -64,3 +73,18 @@ class IssueSerializer(serializers.ModelSerializer):
 
     def get_rendered_content(self, obj):
         return obj.formatted_content()
+
+class StkPushSerializer(serializers.Serializer):
+    phone_number = serializers.IntegerField(
+        min_value=254000000000,  # Example minimum value for Kenyan phone numbers
+        max_value=2549999999999,  # Example maximum value for Kenyan phone numbers
+        help_text="The phone number to send STK Push to, e.g., 7xxxxxxxx."
+    )
+    amount = serializers.IntegerField(
+        min_value=1,  # Ensure the amount is at least 1
+        help_text="The amount to transact."
+    )
+    account_reference = serializers.CharField(
+        max_length=10000000,
+        help_text="The account reference for the transaction."
+    )

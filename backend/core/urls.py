@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import *
-
+from .mpesa import *
 urlpatterns = [
     path('blogs/create', BlogCreate.as_view(), name='create_blog'),
     path('issues/create', IssueCreate.as_view(), name='create_issue'),
@@ -17,4 +17,5 @@ urlpatterns = [
     path('issues/<int:pk>', IssueDetail.as_view(), name='issue_detail'),
     path('blogs/<int:pk>', BlogDetail.as_view(), name='blog_detail'),
     path('candidates/<int:pk>', CandidateDetail.as_view(), name='candidate_detail'),
+    path('stkpush', StkPushView.as_view(), name='stkpush'),
 ]
