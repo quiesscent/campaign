@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Blog, Event, Volunteer, Ward, Issue, County, Policies , Candidate, Tag
+from .models import Blog, Event, Volunteer, Ward, Issue, County, Policies , Candidate, Tag, Members
 
 
 
@@ -73,6 +73,12 @@ class IssueSerializer(serializers.ModelSerializer):
 
     def get_rendered_content(self, obj):
         return obj.formatted_content()
+
+class JoinUsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Members
+        fields = '__all__'
+
 
 class StkPushSerializer(serializers.Serializer):
     phone_number = serializers.IntegerField(

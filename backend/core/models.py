@@ -130,3 +130,22 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f"{self.receipt} payment for {self.reference}"
+
+
+class Members(models.Model):
+    firstname = models.CharField(max_length=255)
+    lastname = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
+    phone = models.IntegerField(validators=[
+            MinValueValidator(1000000000),
+            MaxValueValidator(99999999999999)  
+        ])
+    county =  models.ForeignKey(County, on_delete=models.CASCADE)
+    ward = models.ForeignKey(Ward, on_delete=models.CASCADE)
+    skills = models.TextField(blank=True)
+
+    class Meta:
+        verbose_name_plural = "Members"
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} from {self.county}"
