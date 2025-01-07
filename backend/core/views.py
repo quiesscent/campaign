@@ -13,9 +13,15 @@ class  BlogCreate(generics.CreateAPIView):
     queryset = Blog.objects.all()
     serializer_class = BlogCreateSerializer
 
-class  VolunteerCreate(generics.CreateAPIView):
-    queryset = Volunteer.objects.all()
-    serializer_class = VolunteerSerializer
+class  VolunteerCreate(APIView):
+   def post(self, request):
+        # print(request.data)  # Debugging: Log incoming data
+        serializer = VolunteerSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print(serializer.errors)  # Debugging: Log validation errors
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class  IssueCreate(generics.CreateAPIView):
     queryset = Issue.objects.all()
@@ -31,83 +37,36 @@ class  BlogList(generics.ListAPIView):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
 
-    def list(self, request, *args, **kwargs):
-        # Get the standard response
-        response = super().list(request, *args, **kwargs)
-
-        # Return only the 'results' part with a 200 OK status
-        return Response(response.data['results'], status=status.HTTP_200_OK)
-
 class  IssueList(generics.ListAPIView):
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
-
-    def list(self, request, *args, **kwargs):
-        # Get the standard response
-        response = super().list(request, *args, **kwargs)
-
-        # Return only the 'results' part with a 200 OK status
-        return Response(response.data['results'], status=status.HTTP_200_OK)
 
 
 class  EventList(generics.ListAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
 
-    def list(self, request, *args, **kwargs):
-        # Get the standard response
-        response = super().list(request, *args, **kwargs)
-
-        # Return only the 'results' part with a 200 OK status
-        return Response(response.data['results'], status=status.HTTP_200_OK)
-
 class  CandidateList(generics.ListAPIView):
     queryset = Candidate.objects.all()
     serializer_class = CandidateSerializer
 
-    def list(self, request, *args, **kwargs):
-        # Get the standard response
-        response = super().list(request, *args, **kwargs)
-
-        # Return only the 'results' part with a 200 OK status
-        return Response(response.data['results'], status=status.HTTP_200_OK)
     
 class  VolunteerList(generics.ListAPIView):
     queryset = Volunteer.objects.all()
     serializer_class = VolunteerSerializer
 
-    def list(self, request, *args, **kwargs):
-        # Get the standard response
-        response = super().list(request, *args, **kwargs)
-
-        # Return only the 'results' part with a 200 OK status
-        return Response(response.data['results'], status=status.HTTP_200_OK)
-
 
 class  WardList(generics.ListAPIView):
-    queryset = Ward.objects.all()
-    serializer_class = WardSerializer
-
-
-    def list(self, request, *args, **kwargs):
-        # Get the standard response
-        response = super().list(request, *args, **kwargs)
-
-        # Return only the 'results' part with a 200 OK status
-        return Response(response.data['results'], status=status.HTTP_200_OK)
+    def get(self, request, county):
+        wards = Ward.objects.filter(county=county)
+        serializer = WardSerializer(wards, many=True)
+        return Response(serializer.data)
 
     
 
 class  CountyList(generics.ListAPIView):
     queryset = County.objects.all()
     serializer_class = CountySerializer
-
-    def list(self, request, *args, **kwargs):
-        # Get the standard response
-        response = super().list(request, *args, **kwargs)
-
-        # Return only the 'results' part with a 200 OK status
-        return Response(response.data['results'], status=status.HTTP_200_OK)
 
     
 class EventDetail(APIView):

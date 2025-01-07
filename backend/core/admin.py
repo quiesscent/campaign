@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Event, Blog, Candidate, Issue, Volunteer, Ward, County, Policies, Transaction
+from .models import Event, Blog, Candidate, Issue, Volunteer, Ward, County, Policies, Transaction, Category
 # Register your models here.
 
 admin.site.register(Event)
@@ -10,4 +10,5 @@ admin.site.register(County)
 admin.site.register(Policies)
 admin.site.register(Issue)
 admin.site.register(Transaction)
+admin.site.register(Category)
 

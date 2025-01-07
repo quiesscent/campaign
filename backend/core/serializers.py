@@ -33,7 +33,7 @@ class EventSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Event 
-        fields = ['title', 'content', 'date', 'venue', 'location', 'image', 'rendered_content' ]
+        fields = ['id', 'title', 'content', 'description', 'date', 'time', 'venue', 'location', 'image', 'rendered_content', 'category' ]
     
     def get_rendered_content(self, obj):
         return obj.formatted_content()

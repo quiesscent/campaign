@@ -2,6 +2,8 @@ from django.db import models
 from django.utils.timezone import now
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
+from datetime import time, date
+from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 
 class Blog(models.Model):
@@ -26,6 +28,14 @@ class Tag(models.Model):
     def __str__(self):
         return self.title
     
+class Category(models.Model):
+    name = models.CharField(max_length=1000, default='')
+
+    class Meta:
+        verbose_name_plural = 'Categories'
+    
+    def __str__(self):
+        return self.name
 
 class County(models.Model):
     name = models.CharField(max_length=20, default='')
@@ -49,10 +59,14 @@ class Ward(models.Model):
 class Event(models.Model):
     title = models.CharField(max_length=10000, default='')
     content = MarkdownxField()
-    date = models.DateTimeField()
+    description = models.TextField(default='')
+    date = models.DateField(default=date.today)
+    time = models.TimeField(default=time(8, 0))
     venue = models.CharField(default='', max_length=100000000000)
+    attendees = models.IntegerField(default=1)
     location = models.CharField(default='', max_length=100000000)
     image = models.ImageField(upload_to='events/', default='events.png')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
     
     def formatted_content(self):
         # Convert Markdown content to HTML
@@ -67,10 +81,12 @@ class Policies(models.Model):
 
 
 class Volunteer(models.Model):
-    full_name = models.CharField(default='', max_length=20)
-    role = models.CharField(default='', max_length=100)
-    skills = models.TextField()
-    phone_number = models.IntegerField()
+    email = models.CharField(default='', max_length=1000)
+    zipcode = models.CharField(default='', max_length=100)
+    phone = models.IntegerField(validators=[
+            MinValueValidator(1000000000),
+            MaxValueValidator(99999999999999)  
+        ])
     county =  models.ForeignKey(County, on_delete=models.CASCADE)
     ward = models.ForeignKey(Ward, on_delete=models.CASCADE)
         
