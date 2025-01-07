@@ -35,8 +35,14 @@ class EventCreate(generics.CreateAPIView):
 
 class  BlogList(generics.ListAPIView):
     queryset = Blog.objects.all()
-    serializer_class = BlogSerializer
+    serializer_class = BlogCreateSerializer
 
+    def list(self, request, *args, **kwargs):
+        # Get the standard response
+        response = super().list(request, *args, **kwargs)
+
+        # Return only the 'results' part with a 200 OK status
+        return Response(response.data['results'], status=status.HTTP_200_OK)
 class  IssueList(generics.ListAPIView):
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
