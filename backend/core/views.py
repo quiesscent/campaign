@@ -29,7 +29,7 @@ class EventCreate(generics.CreateAPIView):
 
 class  BlogList(generics.ListAPIView):
     queryset = Blog.objects.all()
-    serializer_class = BlogCreateSerializer
+    serializer_class = BlogSerializer
 
     def list(self, request, *args, **kwargs):
         # Get the standard response
