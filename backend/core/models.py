@@ -26,7 +26,7 @@ class Tag(models.Model):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='tags')
 
     def __str__(self):
-        return self.title
+        return self.name
     
 class Category(models.Model):
     name = models.CharField(max_length=1000, default='')
@@ -111,7 +111,7 @@ class Issue(models.Model):
         ('ward', 'Ward'),
     )
     title = models.TextField()
-    content = MarkdownxField()
+    content = models.TextField(default='')
     level =  models.CharField(max_length=20, choices=ISSUE_LEVEL) 
     county =  models.ForeignKey(County, on_delete=models.CASCADE)
     ward = models.ForeignKey(Ward, on_delete=models.CASCADE)
@@ -130,6 +130,26 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f"{self.receipt} payment for {self.reference}"
+
+
+class ImageCategory(models.Model):
+    name = models.CharField(max_length=100, default='')
+
+    class Meta:
+        verbose_name_plural = 'Image Categories'
+
+    def __str__(self):
+        return f'Okiya {self.name}'
+
+class Gallery(models.Model):
+    image = models.ImageField(upload_to='gallery/', default='image.png')
+    category = models.ForeignKey(ImageCategory, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = 'Images'
+
+    def __str__(self):
+        return f'Image when in {self.category}'
 
 
 class Members(models.Model):

@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from .serializers import *
 from rest_framework import status
 from django.http import Http404
+from django.conf import settings
 from rest_framework.parsers import MultiPartParser, FormParser
 # Create your views here.
 
@@ -64,6 +65,21 @@ class  VolunteerList(generics.ListAPIView):
     queryset = Volunteer.objects.all()
     serializer_class = VolunteerSerializer
 
+class  GalleryList(generics.ListAPIView):
+    def get(self, request):
+        galleries = Gallery.objects.select_related('category')
+        data = [
+            {
+                "id": gallery.id,
+                "src": request.build_absolute_uri(gallery.image.url),
+                "alt": gallery.category.name,
+                "category": gallery.category.name,
+            }
+            for gallery in galleries
+        ]
+        return Response(data)
+
+
 class  MemberList(generics.ListAPIView):
     queryset = Members.objects.all()
     serializer_class = JoinUsSerializer
@@ -97,24 +113,24 @@ class EventDetail(APIView):
         serializer = EventSerializer(event)
         return Response(serializer.data)
 
-    def put(self, request, pk, format=None):
-        """
-        Update an Event instance.
-        """
-        event = self.get_object(pk)
-        serializer = EventSerializer(event, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # def put(self, request, pk, format=None):
+    #     """
+    #     Update an Event instance.
+    #     """
+    #     event = self.get_object(pk)
+    #     serializer = EventSerializer(event, data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, pk, format=None):
-        """
-        Delete an Event instance.
-        """
-        event = self.get_object(pk)
-        event.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    # def delete(self, request, pk, format=None):
+    #     """
+    #     Delete an Event instance.
+    #     """
+    #     event = self.get_object(pk)
+    #     event.delete()
+    #     return Response(status=status.HTTP_204_NO_CONTENT)
 
 class BlogDetail(APIView):
     
@@ -132,24 +148,24 @@ class BlogDetail(APIView):
         serializer = BlogSerializer(blog)
         return Response(serializer.data)
 
-    def put(self, request, pk, format=None):
-        """
-        Update a Blog instance.
-        """
-        blog  = self.get_object(pk)
-        serializer = BlogSerializer(blog, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # def put(self, request, pk, format=None):
+    #     """
+    #     Update a Blog instance.
+    #     """
+    #     blog  = self.get_object(pk)
+    #     serializer = BlogSerializer(blog, data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, pk, format=None):
-        """
-        Delete a Blog instance.
-        """
-        blog = self.get_object(pk)
-        blog.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    # def delete(self, request, pk, format=None):
+    #     """
+    #     Delete a Blog instance.
+    #     """
+    #     blog = self.get_object(pk)
+    #     blog.delete()
+    #     return Response(status=status.HTTP_204_NO_CONTENT)
 
 class CandidateDetail(APIView):
     def get_object(self, pk):
