@@ -47,6 +47,10 @@ class  BlogList(generics.ListAPIView):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
 
+class  PolicyList(generics.ListAPIView):
+    queryset = Policies.objects.all()
+    serializer_class = PolicySerializer
+
 class  IssueList(generics.ListAPIView):
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
@@ -65,32 +69,36 @@ class  VolunteerList(generics.ListAPIView):
     queryset = Volunteer.objects.all()
     serializer_class = VolunteerSerializer
 
-class  GalleryList(generics.ListAPIView):
-    def get(self, request):
-        galleries = Gallery.objects.select_related('category')
-        data = [
-            {
-                "id": gallery.id,
-                "src": request.build_absolute_uri(gallery.image.url),
-                "alt": gallery.category.name,
-                "category": gallery.category.name,
-            }
-            for gallery in galleries
-        ]
-        return Response(data)
-
+# class  GalleryList(generics.ListAPIView):
+#     def get(self, request):
+#         galleries = Gallery.objects.select_related('category')
+#         data = [
+#             {
+#                 "id": gallery.id,
+#                 "src": request.build_absolute_uri(gallery.image.url),
+#                 "alt": gallery.category.name,
+#                 "category": gallery.category.name,
+#             }
+#             for gallery in galleries
+#         ]
+#         return Response(data)
 
 class  MemberList(generics.ListAPIView):
     queryset = Members.objects.all()
     serializer_class = JoinUsSerializer
 
-class  WardList(generics.ListAPIView):
+class  ConstituencyList(generics.ListAPIView):
     def get(self, request, county):
-        wards = Ward.objects.filter(county=county)
-        serializer = WardSerializer(wards, many=True)
+        constituency = Constituency.objects.filter(county=county)
+        serializer = WardSerializer(constituency, many=True)
         return Response(serializer.data)
 
-    
+
+class  WardList(generics.ListAPIView):
+    def get(self, request, county):
+        wards = Ward.objects.filter(constituency=constituency)
+        serializer = WardSerializer(wards, many=True)
+        return Response(serializer.data)
 
 class  CountyList(generics.ListAPIView):
     queryset = County.objects.all()

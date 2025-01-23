@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Blog, Event, Volunteer, Ward, Issue, County, Policies , Candidate, Tag, Members, Gallery
+from .models import *
 
 
 
@@ -10,20 +10,18 @@ class TagSerializer(serializers.ModelSerializer):
 
 class BlogCreateSerializer(serializers.ModelSerializer):    
     rendered_content = serializers.SerializerMethodField()
-    tags = TagSerializer(many=True, read_only=True)
     class Meta:
         model = Blog 
-        fields = ['id', 'title', 'description', 'content', 'image', 'rendered_content', 'tags' ]
+        fields = ['id', 'title', 'description', 'content', 'image', 'rendered_content']
 
     def get_rendered_content(self, obj):
         return obj.formatted_content()
 
 class BlogSerializer(serializers.ModelSerializer):
     rendered_content = serializers.SerializerMethodField()
-    tags = TagSerializer(many=True, read_only=True)
     class Meta:
         model = Blog 
-        fields = ['id', 'title', 'description', 'content', 'image', 'rendered_content', 'tags',  'created_at' ]
+        fields = ['id', 'title', 'description', 'content', 'image', 'rendered_content',  'created_at' ]
 
     def get_rendered_content(self, obj):
         return obj.formatted_content()
@@ -45,9 +43,10 @@ class CandidateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class PolicySerializer(serializers.ModelSerializer):
+    tags = TagSerializer(many=True, read_only=True)
     class Meta:
         model = Policies
-        fields = '__all__'
+        fields = ['file', 'image', 'tags']
 
 
 class CountySerializer(serializers.ModelSerializer):
@@ -60,6 +59,11 @@ class WardSerializer(serializers.ModelSerializer):
         model = Ward
         fields = '__all__'
 
+class ConstituencySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Constituency
+        fields = '__all__'
+    
 class VolunteerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Volunteer
@@ -69,16 +73,10 @@ class IssueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Issue
         fields = ['title', 'content', 'level', 'county', 'ward']
- 
 
 class JoinUsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Members
-        fields = '__all__'
-
-class GallerySerializer(serializers.ModelSerializer):
-    class Meta: 
-        model = Gallery 
         fields = '__all__'
 
 class StkPushSerializer(serializers.Serializer):
@@ -88,8 +86,8 @@ class StkPushSerializer(serializers.Serializer):
         help_text="The phone number to send STK Push to, e.g., 7xxxxxxxx."
     )
     amount = serializers.IntegerField(
-        min_value=1,  # Ensure the amount is at least 1
-        help_text="The amount to transact."
+        min_value=50,  # Ensure the amount is at least 1
+        help_text="The amount to transact.",
     )
     account_reference = serializers.CharField(
         max_length=10000000,

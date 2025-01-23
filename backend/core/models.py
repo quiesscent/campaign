@@ -21,9 +21,15 @@ class Blog(models.Model):
     def __str__(self):
         return self.title
 
+class Policies(models.Model):
+    title = models.CharField(max_length=10000000000, default='')
+    image = models.ImageField(upload_to='policies/', default='')
+    file =  models.FileField(upload_to='uploads/documents/')
+
+
 class Tag(models.Model):
     name = models.CharField(max_length=10000, default='')
-    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='tags')
+    policies = models.ForeignKey(Policies, on_delete=models.CASCADE, related_name='tags', default=1)
 
     def __str__(self):
         return self.name
@@ -46,10 +52,19 @@ class County(models.Model):
     def __str__(self):
         return f'{self.name}'
 
+class Constituency(models.Model):
+    name = models.CharField(max_length=20, default='')
+    county = models.ForeignKey(County, related_name='constituency', on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = 'Constituencies'
+   
+    def __str__(self):
+        return f'{self.name}'
 
 class Ward(models.Model):
     name = models.CharField(max_length=20, default='')
-    county = models.ForeignKey(County, related_name='ward', on_delete=models.CASCADE)
+    constituency = models.ForeignKey(Constituency, related_name='ward', on_delete=models.CASCADE, default=1)
 
    
     def __str__(self):
@@ -74,11 +89,6 @@ class Event(models.Model):
     
     def __str__(self):
         return self.title
-
-class Policies(models.Model):
-    title = models.CharField(max_length=10000000000, default='')
-    file =  models.FileField(upload_to='uploads/documents/')
-
 
 class Volunteer(models.Model):
     email = models.CharField(default='', max_length=1000)
@@ -132,26 +142,6 @@ class Transaction(models.Model):
         return f"{self.receipt} payment for {self.reference}"
 
 
-class ImageCategory(models.Model):
-    name = models.CharField(max_length=100, default='')
-
-    class Meta:
-        verbose_name_plural = 'Image Categories'
-
-    def __str__(self):
-        return f'Okiya {self.name}'
-
-class Gallery(models.Model):
-    image = models.ImageField(upload_to='gallery/', default='image.png')
-    category = models.ForeignKey(ImageCategory, on_delete=models.CASCADE)
-
-    class Meta:
-        verbose_name_plural = 'Images'
-
-    def __str__(self):
-        return f'Image when in {self.category}'
-
-
 class Members(models.Model):
     firstname = models.CharField(max_length=255)
     lastname = models.CharField(max_length=255)
@@ -169,3 +159,20 @@ class Members(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} from {self.county}"
+
+class Order(models.Model):
+    ORDER_STATUS = (
+        ('paid', 'Paid'),
+        ('unpaid', 'Unpaid')
+    )
+    name = models.CharField(max_length=200, default='')
+    email = models.EmailField(default='')
+    address = models.CharField(max_length=100, default='')
+    item = models.CharField(max_length=100, default='')
+    quantity = models.CharField(max_length=100, default='')
+    sizes = models.CharField(max_length=100, default='', null=True, blank=True)
+    color = models.CharField(max_length=100, default='', null=True, blank=True)
+    status =  models.CharField(max_length=20, choices=ORDER_STATUS)
+    def __str__(self):
+
+        return f'Order by {self.name} status {self.status}'
