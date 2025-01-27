@@ -63,7 +63,12 @@ class ConstituencySerializer(serializers.ModelSerializer):
     class Meta:
         model = Constituency
         fields = '__all__'
-    
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = '__all__'
+
 class VolunteerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Volunteer
@@ -86,10 +91,18 @@ class StkPushSerializer(serializers.Serializer):
         help_text="The phone number to send STK Push to, e.g., 7xxxxxxxx."
     )
     amount = serializers.IntegerField(
-        min_value=50,  # Ensure the amount is at least 1
+        min_value=1,  # Ensure the amount is at least 1
         help_text="The amount to transact.",
     )
-    account_reference = serializers.CharField(
-        max_length=10000000,
-        help_text="The account reference for the transaction."
+   
+
+class OrderStkPushSerializer(serializers.Serializer):
+    phone_number = serializers.IntegerField(
+        min_value=254000000000,  # Example minimum value for Kenyan phone numbers
+        max_value=2549999999999,  # Example maximum value for Kenyan phone numbers
+        help_text="The phone number to send STK Push to, e.g., 7xxxxxxxx."
+    )
+    amount = serializers.IntegerField(
+        min_value=1,  # Ensure the amount is at least 1
+        help_text="The amount to transact.",
     )

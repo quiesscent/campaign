@@ -24,6 +24,10 @@ class  VolunteerCreate(APIView):
         print(serializer.errors)  # Debugging: Log validation errors
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class  OrdersCreate(generics.CreateAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+
 class JoinView(APIView):
     def post(self, request):
         print(request.data)  # Debugging: Log incoming data

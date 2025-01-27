@@ -3,6 +3,7 @@ from django.utils.timezone import now
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
 from datetime import time, date
+import json
 from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 
@@ -168,11 +169,16 @@ class Order(models.Model):
     name = models.CharField(max_length=200, default='')
     email = models.EmailField(default='')
     address = models.CharField(max_length=100, default='')
-    item = models.CharField(max_length=100, default='')
-    quantity = models.CharField(max_length=100, default='')
-    sizes = models.CharField(max_length=100, default='', null=True, blank=True)
-    color = models.CharField(max_length=100, default='', null=True, blank=True)
+    items = models.TextField(default='')
     status =  models.CharField(max_length=20, choices=ORDER_STATUS)
+
+    def set_order_content(self, content):
+        self.items = json.dumps(content)  # Convert dict to JSON string
+
+    def get_order_content(self):
+        return json.loads(self.items)  # Convert JSON string back to dict
+
+
     def __str__(self):
 
         return f'Order by {self.name} status {self.status}'
