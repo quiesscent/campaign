@@ -100,11 +100,8 @@ def order_mpesa_callback(request):
 
 
                 Transaction.objects.create(
-                        checkout_request_id=checkout_request_id,
                         amount=amount,
-                        phone_number=phone_number,
                         reference=reference,
-                        receipt=receipt_number
                     )
                 logger.info("New transaction created for CheckoutRequestID: %s", checkout_request_id)
 

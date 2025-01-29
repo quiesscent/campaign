@@ -132,11 +132,8 @@ class Issue(models.Model):
         return f'A {self.level} issue level on {self.title}'
 
 class Transaction(models.Model):
-    receipt = models.CharField(max_length=255, null=True, blank=True)  # New IntegerField
     reference = models.CharField(max_length=255, null=True, blank=True)  # Optional
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    phone_number = models.CharField(max_length=15)
-    checkout_request_id = models.CharField(max_length=255)
     created_at = models.DateTimeField(default=now)
 
     def __str__(self):

@@ -60,6 +60,7 @@ class StkPushView(APIView):
         # If data is invalid
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 # @method_decorator(csrf_exempt, name='dispatch')
 @csrf_exempt
 def mpesa_callback(request):
@@ -98,13 +99,11 @@ def mpesa_callback(request):
                         transaction_date = item.get('Value', '')      
 
                 Transaction.objects.create(
-                        checkout_request_id=checkout_request_id,
                         amount=amount,
-                        phone_number=phone_number,
                         reference=reference,
-                        receipt=receipt_number
                 )
-                # logger.info("New transaction created for CheckoutRequestID: %s", checkout_request_id)
+                logger.info("New transaction created for CheckoutRequestID: %s", checkout_request_id)
+                
                 return JsonResponse({'message': 'Payment successful and processed'}, status=200)
 
             else:
