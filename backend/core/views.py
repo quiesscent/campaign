@@ -28,14 +28,9 @@ class  OrdersCreate(generics.CreateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
-class JoinView(APIView):
-    def post(self, request):
-        print(request.data)  # Debugging: Log incoming data
-        serializer = JoinUsSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"message": "Data submitted successfully"}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class JoinView(generics.CreateAPIView):
+    queryset = Members.objects.all()
+    serializer_class = JoinUsSerializer 
 
 class  IssueCreate(generics.CreateAPIView):
     queryset = Issue.objects.all()
