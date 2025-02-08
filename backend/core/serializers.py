@@ -81,23 +81,23 @@ class IssueSerializer(serializers.ModelSerializer):
 
 
 class JoinUsSerializer(serializers.ModelSerializer):
-    county = serializers.IntegerField(write_only=True)  
-    ward = serializers.IntegerField(write_only=True)  
-    county = CountySerializer(read_only=True)
-    ward = WardSerializer(read_only=True)
-    
+    county = serializers.PrimaryKeyRelatedField(queryset=County.objects.all(), write_only=True)
+    ward = serializers.PrimaryKeyRelatedField(queryset=Ward.objects.all(), write_only=True)
+
     class Meta:
         model = Members
-        fields = ['id', 'firstname', 'lastname', 'email', 'phone', 'county', 'ward', 'skills', 'county', 'ward']
+        fields = ['id', 'firstname', 'lastname', 'email', 'phone', 'skills', 'county', 'ward']
 
     def create(self, validated_data):
         county_number = validated_data.pop('county')
         ward_number = validated_data.pop('ward')
-        
+
         # Fetch the county and ward instances using the number fields
-        county = County.objects.get(number=county_number)
-        ward = Ward.objects.get(number=ward_number)
+        county = County.objects.get(name=county_number)
+        ward = Ward.objects.get(name=ward_number) 
+
         member = Members.objects.create(county=county, ward=ward, **validated_data)
+        # member.save()
         return member
 
 class StkPushSerializer(serializers.Serializer):

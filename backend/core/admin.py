@@ -13,4 +13,5 @@ admin.site.register(Transaction)
 admin.site.register(Category)
 admin.site.register(Tag)
 admin.site.register(Constituency)
+admin.site.register(Members)
 

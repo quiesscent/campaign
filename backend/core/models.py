@@ -159,7 +159,7 @@ class Members(models.Model):
         verbose_name_plural = "Members"
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name} from {self.county}"
+        return f"{self.firstname} {self.lastname} from {self.county}"
 
 class Order(models.Model):
     ORDER_STATUS = (
