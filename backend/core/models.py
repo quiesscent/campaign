@@ -188,5 +188,5 @@ class Feedback(models.Model):
     message = models.TextField(default='')
     
     def __str__(self):
-        return f'Feedback'
+        return f'{self.message}'
  
