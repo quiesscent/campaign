@@ -52,12 +52,12 @@ class PolicySerializer(serializers.ModelSerializer):
 class CountySerializer(serializers.ModelSerializer):
     class Meta:
         model = County
-        fields = '__all__'
+        fields = ['number', 'name']
 
 class WardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ward
-        fields = '__all__'
+        fields = ['number', 'name']
 
 class ConstituencySerializer(serializers.ModelSerializer):
     class Meta:
@@ -79,10 +79,26 @@ class IssueSerializer(serializers.ModelSerializer):
         model = Issue
         fields = ['title', 'content', 'level', 'county', 'ward']
 
+
 class JoinUsSerializer(serializers.ModelSerializer):
+    county_number = serializers.IntegerField(write_only=True)  
+    ward_number = serializers.IntegerField(write_only=True)  
+    county = CountySerializer(read_only=True)
+    ward = WardSerializer(read_only=True)
+    
     class Meta:
         model = Members
-        fields = '__all__'
+        fields = ['id', 'firstname', 'lastname', 'email', 'phone', 'county', 'ward', 'skills', 'county', 'ward']
+
+    def create(self, validated_data):
+        county_number = validated_data.pop('county')
+        ward_number = validated_data.pop('ward')
+        
+        # Fetch the county and ward instances using the number fields
+        county = County.objects.get(number=county_number)
+        ward = Ward.objects.get(number=ward_number)
+        member = Members.objects.create(county=county, ward=ward, **validated_data)
+        return member
 
 class StkPushSerializer(serializers.Serializer):
     phone_number = serializers.IntegerField(

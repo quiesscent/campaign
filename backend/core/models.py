@@ -34,7 +34,7 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
-    
+
 class Category(models.Model):
     name = models.CharField(max_length=1000, default='')
 
@@ -45,6 +45,7 @@ class Category(models.Model):
         return self.name
 
 class County(models.Model):
+    number = models.IntegerField(unique=True)
     name = models.CharField(max_length=20, default='')
 
     class Meta:
@@ -56,6 +57,7 @@ class County(models.Model):
 class Constituency(models.Model):
     name = models.CharField(max_length=20, default='')
     county = models.ForeignKey(County, related_name='constituency', on_delete=models.CASCADE)
+    number = models.IntegerField(unique=True)
 
     class Meta:
         verbose_name_plural = 'Constituencies'
@@ -66,6 +68,7 @@ class Constituency(models.Model):
 class Ward(models.Model):
     name = models.CharField(max_length=20, default='')
     constituency = models.ForeignKey(Constituency, related_name='ward', on_delete=models.CASCADE, default=1)
+    number = models.IntegerField(unique=True)
 
    
     def __str__(self):
@@ -98,8 +101,8 @@ class Volunteer(models.Model):
             MinValueValidator(1000000000),
             MaxValueValidator(99999999999999)  
         ])
-    county =  models.ForeignKey(County, on_delete=models.CASCADE)
-    ward = models.ForeignKey(Ward, on_delete=models.CASCADE)
+    county =  models.ForeignKey(County, on_delete=models.CASCADE, related_name='volunteers')
+    ward = models.ForeignKey(Ward, on_delete=models.CASCADE, related_name='volunteers')
         
     def __str__(self):
         return f'{self.full_name}'
@@ -109,8 +112,8 @@ class Candidate(models.Model):
     name = models.CharField(max_length=1000000, default='')
     position = models.CharField(max_length=1000, default='')
     about = models.TextField(default='')
-    county =  models.ForeignKey(County, on_delete=models.CASCADE)
-    ward = models.ForeignKey(Ward, on_delete=models.CASCADE)
+    county =  models.ForeignKey(County, on_delete=models.CASCADE, related_name='candidates')
+    ward = models.ForeignKey(Ward, on_delete=models.CASCADE, related_name='candidates')
 
     def __str__(self):
         return f'{self.name} for {self.position} in {self.county}'
@@ -124,8 +127,8 @@ class Issue(models.Model):
     title = models.TextField()
     content = models.TextField(default='')
     level =  models.CharField(max_length=20, choices=ISSUE_LEVEL) 
-    county =  models.ForeignKey(County, on_delete=models.CASCADE)
-    ward = models.ForeignKey(Ward, on_delete=models.CASCADE)
+    county =  models.ForeignKey(County, on_delete=models.CASCADE, related_name='issues')
+    ward = models.ForeignKey(Ward, on_delete=models.CASCADE, related_name='issues')
 
 
     def __str__(self):
@@ -148,8 +151,8 @@ class Members(models.Model):
             MinValueValidator(1000000000),
             MaxValueValidator(99999999999999)  
         ])
-    county =  models.ForeignKey(County, on_delete=models.CASCADE)
-    ward = models.ForeignKey(Ward, on_delete=models.CASCADE)
+    county =  models.ForeignKey(County, on_delete=models.CASCADE, related_name='members')
+    ward = models.ForeignKey(Ward, on_delete=models.CASCADE, related_name='members')
     skills = models.TextField(blank=True)
 
     class Meta:
