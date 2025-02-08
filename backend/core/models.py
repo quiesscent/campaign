@@ -95,17 +95,16 @@ class Event(models.Model):
         return self.title
 
 class Volunteer(models.Model):
-    email = models.CharField(default='', max_length=1000)
-    zipcode = models.CharField(default='', max_length=100)
+    firstname = models.CharField(max_length=255, default='')
+    lastname = models.CharField(max_length=255, default='')
+    email = models.EmailField(unique=True)
     phone = models.IntegerField(validators=[
             MinValueValidator(1000000000),
             MaxValueValidator(99999999999999)  
         ])
-    county =  models.ForeignKey(County, on_delete=models.CASCADE, related_name='volunteers')
-    ward = models.ForeignKey(Ward, on_delete=models.CASCADE, related_name='volunteers')
         
     def __str__(self):
-        return f'{self.full_name}'
+        return f'{self.firstname} {self.lastname}'
 
 
 class Candidate(models.Model):
