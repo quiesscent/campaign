@@ -81,8 +81,8 @@ class IssueSerializer(serializers.ModelSerializer):
 
 
 class JoinUsSerializer(serializers.ModelSerializer):
-    county = serializers.PrimaryKeyRelatedField(queryset=County.objects.all(), write_only=True)
-    ward = serializers.PrimaryKeyRelatedField(queryset=Ward.objects.all(), write_only=True)
+    county = serializers.IntegerField(write_only=True) 
+    ward = serializers.IntegerField(write_only=True) 
 
     class Meta:
         model = Members
@@ -93,8 +93,8 @@ class JoinUsSerializer(serializers.ModelSerializer):
         ward_number = validated_data.pop('ward')
 
         # Fetch the county and ward instances using the number fields
-        county = County.objects.get(name=county_number)
-        ward = Ward.objects.get(name=ward_number) 
+        county = County.objects.get(number=county_number)
+        ward = Ward.objects.get(number=ward_number) 
 
         member = Members.objects.create(county=county, ward=ward, **validated_data)
         # member.save()
