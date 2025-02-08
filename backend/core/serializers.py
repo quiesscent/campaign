@@ -52,7 +52,7 @@ class PolicySerializer(serializers.ModelSerializer):
 class CountySerializer(serializers.ModelSerializer):
     class Meta:
         model = County
-        fields = ['number']
+        fields = ['id', 'number']
 
 class WardSerializer(serializers.ModelSerializer):
     class Meta:
@@ -62,7 +62,7 @@ class WardSerializer(serializers.ModelSerializer):
 class ConstituencySerializer(serializers.ModelSerializer):
     class Meta:
         model = Constituency
-        fields = ['number']
+        fields = ['name', 'county', 'number']
 
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:

@@ -26,6 +26,17 @@ class  VolunteerCreate(APIView):
         print(serializer.errors)  # Debugging: Log validation errors
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class  ConstituencyCreate(generics.CreateAPIView):
+    queryset = Constituency.objects.all()
+    serializer_class = ConstituencySerializer
+
+    def create(self, request, *args, **kwargs):
+        # Expecting a list of objects
+        serializer = self.get_serializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
 class  OrdersCreate(generics.CreateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
@@ -114,11 +125,11 @@ class  MemberList(generics.ListAPIView):
     queryset = Members.objects.all()
     serializer_class = JoinUsSerializer
 
-class  ConstituencyList(generics.ListAPIView):
-    def get(self, request, county):
-        constituency = Constituency.objects.filter(county=county)
-        serializer = WardSerializer(constituency, many=True)
-        return Response(serializer.data)
+# class  ConstituencyList(generics.ListAPIView):
+#     def get(self, request, county):
+#         constituency = Constituency.objects.filter(county=county)
+#         serializer = WardSerializer(constituency, many=True)
+#         return Response(serializer.data)
 
 
 class  WardList(generics.ListAPIView):

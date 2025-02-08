@@ -52,7 +52,7 @@ class County(models.Model):
         verbose_name_plural = 'Counties'
 
     def __str__(self):
-        return f'{self.name}'
+        return f'{self.name} of ID: {self.id} Number: {self.number}'
 
 class Constituency(models.Model):
     name = models.CharField(max_length=20, default='')
