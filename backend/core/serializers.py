@@ -74,6 +74,13 @@ class VolunteerSerializer(serializers.ModelSerializer):
         model = Volunteer
         fields = '__all__'
 
+
+class FeedbackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Feedback
+        fields = '__all__'
+
+
 class IssueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Issue

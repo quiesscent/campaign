@@ -14,4 +14,5 @@ admin.site.register(Category)
 admin.site.register(Tag)
 admin.site.register(Constituency)
 admin.site.register(Members)
+admin.site.register(Feedback)
 

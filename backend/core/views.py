@@ -32,6 +32,10 @@ class JoinView(generics.CreateAPIView):
     queryset = Members.objects.all()
     serializer_class = JoinUsSerializer 
 
+class FeebackView(generics.CreateAPIView):
+    queryset = Feedback.objects.all()
+    serializer_class = FeedbackSerializer
+     
 class  IssueCreate(generics.CreateAPIView):
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer

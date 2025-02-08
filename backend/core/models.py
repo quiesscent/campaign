@@ -182,3 +182,11 @@ class Order(models.Model):
     def __str__(self):
 
         return f'Order by {self.name} status {self.status}'
+
+
+class Feedback(models.Model):
+    message = models.TextField(default='')
+    
+    def __str__(self):
+        return f'Feedback'
+ 
