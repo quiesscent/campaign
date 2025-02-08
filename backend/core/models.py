@@ -152,6 +152,7 @@ class Members(models.Model):
         ])
     county =  models.ForeignKey(County, on_delete=models.CASCADE, related_name='members')
     ward = models.ForeignKey(Ward, on_delete=models.CASCADE, related_name='members')
+    constituencies = models.ForeignKey(Constituency, on_delete=models.CASCADE, related_name='members', default=1)
     skills = models.TextField(blank=True)
 
     class Meta:

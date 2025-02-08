@@ -11,6 +11,7 @@ urlpatterns = [
     path('members', MemberList.as_view(), name='members'),
     path('blogs', BlogList.as_view(), name='blogs'),
     path('policies', PolicyList.as_view(), name='policy'),
+    path('policies/download/<int:pk>', download_file, name='download_file'),
     # path('issues', IssueList.as_view(), name='issues'),
     path('events', EventList.as_view(), name='events'),
     # path('candidates', CandidateList.as_view(), name='candidates'),

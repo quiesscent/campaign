@@ -3,9 +3,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import *
 from rest_framework import status
-from django.http import Http404
+from django.http import Http404, HttpResponse
+from django.shortcuts import get_object_or_404
 from django.conf import settings
 from rest_framework.parsers import MultiPartParser, FormParser
+import os
 # Create your views here.
 
 
@@ -58,6 +60,23 @@ class  PolicyList(generics.ListAPIView):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data) 
+
+
+
+def download_file(request, pk):
+    policy = get_object_or_404(Policies, id=pk)
+    file_path = policy.file.path 
+
+    # Check if the file exists
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as file:
+            response = HttpResponse(file.read(), content_type='application/octet-stream')
+            response['Content-Disposition'] = f'attachment; filename="{os.path.basename(file_path)}"'
+            return response
+    else:
+        return HttpResponse("File not found.", status=404)
+    
+
 
 class  IssueList(generics.ListAPIView):
     queryset = Issue.objects.all()
