@@ -53,6 +53,11 @@ class  BlogList(generics.ListAPIView):
 class  PolicyList(generics.ListAPIView):
     queryset = Policies.objects.all()
     serializer_class = PolicySerializer
+    
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data) 
 
 class  IssueList(generics.ListAPIView):
     queryset = Issue.objects.all()

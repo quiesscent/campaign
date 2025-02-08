@@ -46,7 +46,7 @@ class PolicySerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, read_only=True)
     class Meta:
         model = Policies
-        fields = ['file', 'image', 'tags']
+        fields = ['title', 'file', 'image', 'tags']
 
 
 class CountySerializer(serializers.ModelSerializer):
