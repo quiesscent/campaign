@@ -52,7 +52,7 @@ class PolicySerializer(serializers.ModelSerializer):
 class CountySerializer(serializers.ModelSerializer):
     class Meta:
         model = County
-        fields = ['id', 'number']
+        fields = ['number']
 
 class WardSerializer(serializers.ModelSerializer):
     class Meta:
@@ -62,7 +62,7 @@ class WardSerializer(serializers.ModelSerializer):
 class ConstituencySerializer(serializers.ModelSerializer):
     class Meta:
         model = Constituency
-        fields = ['name', 'county', 'number']
+        fields = ['number']
 
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
@@ -89,24 +89,24 @@ class IssueSerializer(serializers.ModelSerializer):
 
 class JoinUsSerializer(serializers.ModelSerializer):
     county = serializers.IntegerField(write_only=True) 
-    ward = serializers.IntegerField(write_only=True) 
+    # ward = serializers.IntegerField(write_only=True) 
     constituency = serializers.IntegerField(write_only=True)
 
     class Meta:
         model = Members
-        fields = ['id', 'firstname', 'lastname', 'email', 'phone', 'skills', 'county', 'ward', 'constituency']
+        fields = ['id', 'firstname', 'lastname', 'email', 'phone', 'skills', 'county','constituency']
 
     def create(self, validated_data):
         county_number = validated_data.pop('county')
-        ward_number = validated_data.pop('ward')
+        # ward_number = validated_data.pop('ward')
         constituency = validated_data.pop('constituency')
 
         # Fetch the county and ward instances using the number fields
         county = County.objects.get(number=county_number)
-        ward = Ward.objects.get(number=ward_number) 
+        # ward = Ward.objects.get(number=ward_number) 
         constituency = Constituency.objects.get(number=constituency)
 
-        member = Members.objects.create(county=county, ward=ward, **validated_data)
+        member = Members.objects.create(county=county, constituency=constituency, **validated_data)
         # member.save()
         return member
 
