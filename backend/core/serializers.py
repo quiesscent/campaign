@@ -52,12 +52,12 @@ class PolicySerializer(serializers.ModelSerializer):
 class CountySerializer(serializers.ModelSerializer):
     class Meta:
         model = County
-        fields = ['number', 'name']
+        fields = ['number']
 
 class WardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ward
-        fields = ['number', 'name']
+        fields = ['number']
 
 class ConstituencySerializer(serializers.ModelSerializer):
     class Meta:
@@ -81,8 +81,8 @@ class IssueSerializer(serializers.ModelSerializer):
 
 
 class JoinUsSerializer(serializers.ModelSerializer):
-    county_number = serializers.IntegerField(write_only=True)  
-    ward_number = serializers.IntegerField(write_only=True)  
+    county = serializers.IntegerField(write_only=True)  
+    ward = serializers.IntegerField(write_only=True)  
     county = CountySerializer(read_only=True)
     ward = WardSerializer(read_only=True)
     
